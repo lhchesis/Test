@@ -1,3 +1,192 @@
 #test
 ## test2
 ### test3
+
+
+SKCC Cloud 엔지니어링 과정 참고 자료
+
+
+
+
+
+
+Project 관련 자료
+
+1.프로젝트 아키텍처
+a.https://bit.ly/2V53O6x
+2.IP Block
+a.https://bit.ly/2XaWW80
+3.Amazon Linux  서버에서 httpd 설치하기
+a.https://bit.ly/36d8Zpc
+4.VPC Peering
+a.https://docs.aws.amazon.com/vpc/latest/peering/create-vpc-peering-
+connection.html#create-vpc-peering-connection-local
+5.Terraform 예제
+a.https://github.com/lormadus/aws-autoscaling-terraform
+6.VPC Peering 테라폼 참고 문서
+a.https://www.terraform.io/docs/providers/aws/r/vpc_peering_connection.html
+b.Multi Region Peering 문법
+i.https://www.terraform.io/docs/providers/aws/r/
+vpc_peering_connection_accepter.html
+7.ALB에 부하 테스트 방법
+a.Linux/Mac: 아래 명령어 실행
+i.$ for i in {1..24}; do curl mydemo-lb-1034186611.ap-
+northeast-2.elb.amazonaws.com; sleep 10;done
+b.Windows: 아래 PowerShell 명령어 실행
+i.PS > for($i=0;$i -lt 24;$i++){wget mydemo-lb-1034186611.ap-
+northeast-2.elb.amazonaws.com;start-sleep -Seconds 10}
+
+
+#!/bin/bash# unixfoo.blogspot.com
+
+if [ $1 ]; then        NUM_PROC=$1else        NUM_PROC=10fi
+
+for i in `seq 0 $((NUM_PROC-1))`; do        awk 'BEGIN {for(i=0;i<10000;i+
++)for(j=0;j<10000;j++);}' &done
+
+echo "PIDS: `pidof awk`"
+
+
+
+8. Docker 실습파일 : https://bit.ly/3e5mzgV
+
+
+
+
+
+1.AWS CodeCommit 실습 자료
+a.https://bit.ly/3cRLJj0
+2.AWS Pipeline 실습 자료
+a.https://bit.ly/2TpwaYt
+3.AWS 개발 도구
+a.https://bit.ly/36gHpaG
+4.CloudFront 와 S3 설정하기
+a.개념 이해하기 - https://aws.amazon.com/ko/blogs/korea/amazon-s3-amazon-
+cloudfront-a-match-made-in-the-cloud/
+b.설정 동영상 - https://www.youtube.com/watch?v=hEdYnN8dnRs
+5.AWS Hands-On Lab
+a.https://bit.ly/2X0lt0k
+6.클라우드 기초 과정 PDF 파일
+a.https://bit.ly/3d0VGLi
+7.DevOps
+a.DevOps 이해하기 - https://bit.ly/3dAO6GI
+b.GitHub - https://bit.ly/3i8Zkpj
+c.AWS 개발자 도구 서비스 이해하기 - https://bit.ly/2CIHw42
+d.AWS CodeCommit - https://bit.ly/3eUHkND
+e.AWS Pipeline 실습 자료 - https://bit.ly/38b6jtt
+f.AWS DevOps 실습 자료 - https://github.com/lormadus/aws-devops-essential
+g.
+
+
+
+
+
+
+VPC 설정 관련 참고 자료
+
+
+
+VPC1 쪽에만 설정
+
+resource "aws_vpc_peering_connection" "foo"  {
+
+peer_owner_id = "4****7878****"
+
+peer_vpc_id   = "${aws_vpc.vpc2.id}"
+
+peer_region = "eu-west-1"
+
+vpc_id        = "${aws_vpc.vpc1.id}"
+
+auto_accept   = true
+
+  tags = {
+
+Name = "VPC Peering between foo and bar"
+
+}}
+
+
+
+VPC Peering  관련 Routing Table에서 아래 수정 추가 (VPC1, VPC2 모두 적용)
+
+route {
+
+     cidr_block = "9.0.0.0/16"
+
+     gateway_id = "${aws_vpc_peering_connection.owner.id}"
+
+  }
+
+
+
+
+
+
+
+
+
+Apache 웹서버 8080 포트로 실행하기
+
+
+
+/etc/httpd/conf/httpd.conf 파일을 열어서 Listen 부분을 80에서 8080으로 수정
+
+
+
+#Listen 12.34.56.78:80
+
+Listen 8080
+
+
+
+설정 저장 후 httpd.service 데몬 재실행
+
+systemctl restart httpd.service
+
+
+
+
+
+SSH 접속을 위한 RSA Public Key 등록
+
+1. Cloud9이나 리눅스 서버에서  ssh-keygen 실행
+
+$ssh-keygen <ENTER>키 3번 누름
+
+
+
+2. 홈디렉토리 및 ~/.ssh 폴더에  id_rsa(Private Key)와 id_rsa.pub(Public Key) 생성 확인
+
+
+
+3. id_rsa.pub 키를 테라폼을 통해 등록 => 참고자료 5번  Github 소스 key.tf 파일 참조
+
+아래  public_key 부분에  id_rsa.pub 키 파일 복사
+
+resource "aws_key_pair" "sshkey" {
+
+key_name   = "david-key"
+
+public_key = "ssh-rsa
+AAAAB3NzaC1yc2EAAAADAQABAAABAQDVKL5oqbTTpblxoPjunm7TjQWYmRc5mZkjC9gn
+MuCSdoSD2m1YJJ4y8Nk/+0xWnbMXmJxSub7Ti2mGp7hbTF31m
++Wn9MebLdG826Qsfd9LQmcdmj7BsOpCH/o1vk
++P71yJybTWqXfaEF9hYmCj0iPzhOFixo9rQwvnMSXEgKgtw5XB8Ic6M0+E1ehZGpQ3eeYF2R
+0mnUJ1OJsuWc3VYqfzE0M4vhtDCL7m6la280op8yGvKHUvkv7+K3n6eMK0J6vAQEaN62JT
+BJEDiYfdt1CjMkIhy860iv7wi7bWW0zRMR2aAFfNAx4ZzDc+8ILOUjFW1BuPJ5oxrnm0LlEF/
+guH ec2-user@ip-172-31-20-214"
+
+}
+
+
+
+4.  변수 설정에서 키파일 이름 매칭
+
+variable "dev_keyname" {
+
+default = "david-key"
+
+}
+
+
