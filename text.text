@@ -190,3 +190,6 @@ default = "david-key"
 }
 
 
+echo "export AWS_ACCESS_KEY_ID=*****" >> ~/.bashrc
+echo "export AWS_SECRET_ACCESS_KEY=****" >> ~/.bashrc
+source ~/.bashrc
