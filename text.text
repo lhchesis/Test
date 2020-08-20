@@ -193,3 +193,22 @@ default = "david-key"
 echo "export AWS_ACCESS_KEY_ID=*****" >> ~/.bashrc
 echo "export AWS_SECRET_ACCESS_KEY=****" >> ~/.bashrc
 source ~/.bashrc
+
+
+
+
+
+
+
+ser02:~/environment/WebAppRepo (master) $ aws cloudformation create-stack --stack-name DevopsWorkshop-roles \ 
+usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+
+  aws help
+  aws <command> help
+  aws <command> <subcommand> help
+
+Unknown options:  
+user02:~/environment/WebAppRepo (master) $ --template-body https://s3.amazonaws.com/devops-workshop-0526-2051/v1/ 01-aws-devops-workshop-roles.template \ 
+bash: --template-body: command not found
+user02:~/environment/WebAppRepo (master) $ --capabilities CAPABILITY_IAM
